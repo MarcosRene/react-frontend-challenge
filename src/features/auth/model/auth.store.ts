@@ -3,8 +3,9 @@ import { persist } from "zustand/middleware"
 
 interface AuthState {
   token: string | null
+  email: string | null
   isAuthenticated: boolean
-  setToken: (token: string | null) => void
+  setCredentials: (token: string, email: string) => void
   logout: () => void
 }
 
@@ -12,14 +13,15 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       token: null,
+      email: null,
       isAuthenticated: false,
 
-      setToken: (token) => {
-        set({ token, isAuthenticated: !!token })
+      setCredentials: (token, email) => {
+        set({ token, email, isAuthenticated: !!token })
       },
 
       logout: () => {
-        set({ token: null, isAuthenticated: false })
+        set({ token: null, email: null, isAuthenticated: false })
       },
     }),
     {
