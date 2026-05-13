@@ -1,5 +1,3 @@
-import { Toaster } from "@/shared/ui/sonner"
-
 export default function App() {
-  return <Toaster richColors />
+  return <h1>Libris</h1>
 }

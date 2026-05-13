@@ -26,6 +26,7 @@ export function SignInForm() {
 
   return (
     <form
+      noValidate
       onSubmit={handleSubmit(handleSignIn)}
       className="flex w-full max-w-sm flex-col items-center gap-10"
     >
@@ -46,6 +47,7 @@ export function SignInForm() {
                     {...field}
                     id="email"
                     type="email"
+                    aria-label="email"
                     placeholder="Seu e-mail"
                     className="h-10"
                     aria-invalid={fieldState.invalid}
@@ -73,11 +75,13 @@ export function SignInForm() {
                       {...field}
                       type={showPassword ? "text" : "password"}
                       id="password"
+                      aria-label="password"
                       placeholder="Sua senha"
                       aria-invalid={fieldState.invalid}
                     />
 
                     <InputGroupButton
+                      type="button"
                       variant="ghost"
                       size="icon-xs"
                       onClick={handleTogglePassword}

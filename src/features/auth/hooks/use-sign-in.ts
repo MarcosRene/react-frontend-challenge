@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { z } from "zod"
-import { signIn } from "../../api/sign-in"
+import { signIn } from "../api/sign-in"
+import { useAuthStore } from "../model/auth.store"
 
 export const signInSchema = z.object({
   email: z
@@ -22,6 +23,8 @@ export type SignInSchema = z.infer<typeof signInSchema>
 export function useSignIn() {
   const navigate = useNavigate()
 
+  const { setToken } = useAuthStore()
+
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -30,16 +33,20 @@ export function useSignIn() {
     },
   })
 
-  const { mutateAsync: signInFn, isPending } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: signIn,
-    onSuccess: () => navigate("/dashboard"),
+    onSuccess: (data) => {
+      setToken(data.token)
+      navigate("/dashboard")
+      toast.success("Login realizado com sucesso!")
+    },
     onError: (error) => {
       toast.error(error.message || "Erro desconhecido")
     },
   })
 
   async function handleSignIn(data: SignInSchema) {
-    await signInFn(data)
+    await mutateAsync(data)
   }
 
   return {

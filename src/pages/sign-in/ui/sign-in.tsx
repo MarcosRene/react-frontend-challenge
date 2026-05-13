@@ -1,4 +1,4 @@
-import { SignInForm } from "@/features/auth/sign-in/ui/sign-in-form"
+import { SignInForm } from "@/features/auth/ui/sign-in-form"
 
 export function SignIn() {
   return (
