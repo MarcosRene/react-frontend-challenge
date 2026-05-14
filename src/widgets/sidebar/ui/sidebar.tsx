@@ -37,7 +37,7 @@ export function Sidebar() {
           <h1 className="text-2xl font-bold font-sans animate-text-shine">
             Libris
           </h1>
-          <p className="text-sm font-sans animate-text-shine shine-zinc">
+          <p className="text-sm font-sans animate-text-shine shine-muted">
             Gerenciador de bibliotecas
           </p>
         </div>
@@ -46,7 +46,7 @@ export function Sidebar() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-zinc-500 hover:bg-accent"
+            className="text-muted-foreground hover:bg-accent"
             onClick={toggleTheme}
             aria-label="Alternar tema"
           >
@@ -61,7 +61,7 @@ export function Sidebar() {
             <Button
               variant="ghost"
               size="icon"
-              className="group text-zinc-500"
+              className="group text-muted-foreground"
               aria-label="Abrir menu"
             >
               <HugeiconsIcon

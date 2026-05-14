@@ -89,7 +89,7 @@
   animation: var(--animate-shine);
 }
 
-.shine-zinc {
+.shine-muted {
   --shine-base: var(--muted-foreground);
 }
 

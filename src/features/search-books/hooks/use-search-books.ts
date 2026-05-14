@@ -1,0 +1,63 @@
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
+import type { Book } from "@/entities/book"
+import { API_KEY, api } from "@/shared/api/axios"
+import type {
+  GoogleBookItem,
+  GoogleBooksResponse,
+  SearchBooksParams,
+} from "../model/types"
+
+function mapGoogleBookToBook(item: GoogleBookItem): Book {
+  return {
+    id: item.id,
+    title: item.volumeInfo?.title ?? "Título desconhecido",
+    authors: item.volumeInfo?.authors ?? [],
+    description: item.volumeInfo?.description ?? "",
+    thumbnailUrl:
+      item.volumeInfo?.imageLinks?.thumbnail?.replace("http://", "https://") ??
+      null,
+    publishedDate: item.volumeInfo?.publishedDate ?? "",
+    publisher: item.volumeInfo?.publisher ?? "",
+  }
+}
+
+export function useSearchBooks({
+  query,
+  printType,
+  orderBy,
+}: SearchBooksParams) {
+  return useSuspenseInfiniteQuery({
+    queryKey: ["books", query, printType, orderBy],
+    queryFn: async ({ pageParam = 0 }) => {
+      if (!query) return { items: [], totalItems: 0 }
+
+      const response = await api.get<GoogleBooksResponse>("/books/v1/volumes", {
+        params: {
+          q: query,
+          startIndex: pageParam,
+          maxResults: 20,
+          printType,
+          orderBy,
+          key: API_KEY,
+        },
+      })
+
+      const data = response.data
+
+      return {
+        totalItems: data.totalItems,
+        items: (data.items || []).map(mapGoogleBookToBook),
+      }
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const currentCount = allPages.reduce(
+        (acc, page) => acc + (page.items?.length || 0),
+        0,
+      )
+      return lastPage.items && lastPage.items.length > 0
+        ? currentCount
+        : undefined
+    },
+  })
+}
