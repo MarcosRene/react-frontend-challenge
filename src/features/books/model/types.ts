@@ -6,9 +6,16 @@ export interface GoogleBookItem {
     description?: string
     imageLinks?: {
       thumbnail?: string
+      smallThumbnail?: string
+      small?: string
+      medium?: string
+      large?: string
     }
     publishedDate?: string
     publisher?: string
+    previewLink?: string
+    pageCount?: number
+    categories?: string[]
   }
 }
 

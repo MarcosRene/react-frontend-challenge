@@ -1,12 +1,13 @@
 import { BookOpen01Icon, Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Suspense, useRef, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import {
   BookList,
   BookListSkeleton,
   orderOptions,
   printTypes,
-} from "@/features/search-books"
+} from "@/features/books"
 import { useDebounce } from "@/shared/lib/hooks/use-debounce"
 import { Button } from "@/shared/ui/button"
 import { EmptyState } from "@/shared/ui/empty-state"
@@ -24,7 +25,10 @@ import {
 } from "@/shared/ui/select"
 
 export function Explore() {
-  const [search, setSearch] = useState("")
+  const [searchParams, setSearchParams] = useSearchParams()
+  const q = searchParams.get("q") || ""
+
+  const [search, setSearch] = useState(q)
   const [printType, setPrintType] = useState("all")
   const [orderBy, setOrderBy] = useState("relevance")
 
@@ -46,6 +50,14 @@ export function Explore() {
   function handleOrderByChange(value: string) {
     setOrderBy(value)
   }
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      setSearchParams({ q: debouncedSearch })
+      return
+    }
+    setSearchParams({})
+  }, [debouncedSearch, setSearchParams])
 
   return (
     <div className="flex flex-col gap-8 p-8">

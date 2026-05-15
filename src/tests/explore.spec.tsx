@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
-import type { GoogleBooksResponse } from "@/features/search-books/model/types"
+import type { GoogleBooksResponse } from "@/features/books/model/types"
 import { Explore } from "@/pages/explore/ui/explore"
 import { api } from "@/shared/api/axios"
 import { renderWithProviders } from "@/shared/test/render"

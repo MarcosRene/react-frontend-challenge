@@ -6,4 +6,7 @@ export interface Book {
   thumbnailUrl: string | null
   publishedDate: string
   publisher: string
+  previewLink?: string
+  pageCount?: number
+  categories?: string[]
 }

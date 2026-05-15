@@ -1,4 +1,5 @@
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
+import { toast } from "sonner"
 import type { Book } from "@/entities/book"
 import { API_KEY, api } from "@/shared/api/axios"
 import type {
@@ -18,6 +19,9 @@ function mapGoogleBookToBook(item: GoogleBookItem): Book {
       null,
     publishedDate: item.volumeInfo?.publishedDate ?? "",
     publisher: item.volumeInfo?.publisher ?? "",
+    previewLink: item.volumeInfo?.previewLink,
+    pageCount: item.volumeInfo?.pageCount,
+    categories: item.volumeInfo?.categories,
   }
 }
 
@@ -31,22 +35,30 @@ export function useSearchBooks({
     queryFn: async ({ pageParam = 0 }) => {
       if (!query) return { items: [], totalItems: 0 }
 
-      const response = await api.get<GoogleBooksResponse>("/books/v1/volumes", {
-        params: {
-          q: query,
-          startIndex: pageParam,
-          maxResults: 20,
-          printType,
-          orderBy,
-          key: API_KEY,
-        },
-      })
+      try {
+        const response = await api.get<GoogleBooksResponse>(
+          "/books/v1/volumes",
+          {
+            params: {
+              q: query,
+              startIndex: pageParam,
+              maxResults: 20,
+              printType,
+              orderBy,
+              key: API_KEY,
+            },
+          },
+        )
 
-      const data = response.data
+        const data = response.data
 
-      return {
-        totalItems: data.totalItems,
-        items: (data.items || []).map(mapGoogleBookToBook),
+        return {
+          totalItems: data.totalItems,
+          items: (data.items || []).map(mapGoogleBookToBook),
+        }
+      } catch (error) {
+        toast.error("Erro ao buscar livros")
+        throw error
       }
     },
     initialPageParam: 0,
