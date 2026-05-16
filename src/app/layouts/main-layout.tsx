@@ -9,7 +9,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       <Sidebar />
-      <main className="flex-1 pt-20 lg:pl-80 lg:pt-0">{children}</main>
+      <main className="flex-1 pt-20 lg:pl-72 lg:pt-0">{children}</main>
     </div>
   )
 }

@@ -5,4 +5,7 @@ export const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  params: {
+    key: import.meta.env.VITE_GOOGLE_API_KEY,
+  },
 })

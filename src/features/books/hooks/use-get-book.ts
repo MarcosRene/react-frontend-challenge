@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
 import type { Book } from "@/entities/book"
-import { API_KEY, api } from "@/shared/api/axios"
+import { api } from "@/shared/api/axios"
 import type { GoogleBookItem } from "../model/types"
 
 function mapGoogleBookToBook(item: GoogleBookItem): Book {
@@ -15,7 +15,7 @@ function mapGoogleBookToBook(item: GoogleBookItem): Book {
       null,
     publishedDate: item.volumeInfo?.publishedDate ?? "",
     publisher: item.volumeInfo?.publisher ?? "",
-    previewLink: item.volumeInfo?.previewLink,
+    previewLink: item.accessInfo?.webReaderLink ?? "",
     pageCount: item.volumeInfo?.pageCount,
     categories: item.volumeInfo?.categories,
   }
@@ -30,11 +30,6 @@ export function useGetBook(id: string | undefined) {
       try {
         const response = await api.get<GoogleBookItem>(
           `/books/v1/volumes/${id}`,
-          {
-            params: {
-              key: API_KEY,
-            },
-          },
         )
 
         return mapGoogleBookToBook(response.data)

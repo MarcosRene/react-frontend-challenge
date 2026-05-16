@@ -5,7 +5,7 @@ import { BookCard } from "@/entities/book"
 import { Button } from "@/shared/ui/button"
 import { EmptyState } from "@/shared/ui/empty-state"
 import { Spinner } from "@/shared/ui/spinner"
-import { useSearchBooks } from "../hooks/use-search-books"
+import { useBooks } from "../hooks/use-books"
 
 interface BookListProps {
   query: string
@@ -21,12 +21,11 @@ export function BookList({
   onFocusSearch,
 }: BookListProps) {
   const loadMoreRef = useRef<HTMLDivElement>(null)
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useSearchBooks({
-      query,
-      printType,
-      orderBy,
-    })
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useBooks({
+    query,
+    printType,
+    orderBy,
+  })
 
   const books = data.pages.flatMap((page) => page.items || [])
 
@@ -66,7 +65,7 @@ export function BookList({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {books.map((book) => (
           <BookCard key={book.id} book={book} />
         ))}

@@ -41,7 +41,7 @@ export function Bookshelf() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex flex-col gap-8 p-8">
+    <div className="flex flex-col gap-3 p-3 md:gap-8 md:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex flex-col items-start gap-1">
           <h1 className="text-3xl font-bold">Minha Estante</h1>

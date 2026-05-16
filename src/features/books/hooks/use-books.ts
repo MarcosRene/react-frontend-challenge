@@ -1,7 +1,7 @@
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
 import type { Book } from "@/entities/book"
-import { API_KEY, api } from "@/shared/api/axios"
+import { api } from "@/shared/api/axios"
 import type {
   GoogleBookItem,
   GoogleBooksResponse,
@@ -19,17 +19,13 @@ function mapGoogleBookToBook(item: GoogleBookItem): Book {
       null,
     publishedDate: item.volumeInfo?.publishedDate ?? "",
     publisher: item.volumeInfo?.publisher ?? "",
-    previewLink: item.volumeInfo?.previewLink,
+    previewLink: item.accessInfo?.webReaderLink ?? "",
     pageCount: item.volumeInfo?.pageCount,
     categories: item.volumeInfo?.categories,
   }
 }
 
-export function useSearchBooks({
-  query,
-  printType,
-  orderBy,
-}: SearchBooksParams) {
+export function useBooks({ query, printType, orderBy }: SearchBooksParams) {
   return useSuspenseInfiniteQuery({
     queryKey: ["books", query, printType, orderBy],
     queryFn: async ({ pageParam = 0 }) => {
@@ -45,7 +41,6 @@ export function useSearchBooks({
               maxResults: 20,
               printType,
               orderBy,
-              key: API_KEY,
             },
           },
         )

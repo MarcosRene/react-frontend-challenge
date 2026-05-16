@@ -9,6 +9,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Link, useParams } from "@tanstack/react-router"
+import { toast } from "sonner"
 import { useBookshelfStore } from "@/entities/book"
 import { useGetBook } from "@/features/books"
 import { BookDetailsSkeleton } from "@/features/books/ui/book-details-skeleton"
@@ -48,10 +49,12 @@ export function BookDetails() {
 
     if (inBookshelf) {
       handleDeleteBookshelfBook(book.id)
+      toast.success("Livro removido da sua estante")
       return
     }
 
     handleCreateBookshelfBook(book)
+    toast.success("Livro adicionado à sua estante")
   }
 
   return (
@@ -112,11 +115,17 @@ export function BookDetails() {
                 variant="outline"
                 size="lg"
                 className="h-12 gap-2 px-8 text-base"
-                onClick={() => window.open(book.previewLink, "_blank")}
-              >
-                <HugeiconsIcon icon={BookOpen01Icon} className="size-5" />
-                Ler amostra
-              </Button>
+                render={
+                  <a
+                    href={book.previewLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <HugeiconsIcon icon={BookOpen01Icon} className="size-5" />
+                    Ler amostra
+                  </a>
+                }
+              />
             )}
           </div>
 

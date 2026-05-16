@@ -76,7 +76,7 @@ export function Explore() {
   }, [debouncedSearch, navigate])
 
   return (
-    <div className="flex flex-col gap-8 p-8">
+    <div className="flex flex-col gap-3 p-3 md:gap-8 md:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex flex-col items-start gap-1">
           <h1 className="text-3xl font-bold">Descoberta</h1>
@@ -120,7 +120,7 @@ export function Explore() {
                 value={printType}
                 onValueChange={handlePrintTypeChange}
               >
-                <SelectTrigger className="w-[140px]">
+                <SelectTrigger className="w-full md:w-[140px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -137,7 +137,7 @@ export function Explore() {
                 value={orderBy}
                 onValueChange={handleOrderByChange}
               >
-                <SelectTrigger className="w-[140px]">
+                <SelectTrigger className="w-full md:w-[140px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

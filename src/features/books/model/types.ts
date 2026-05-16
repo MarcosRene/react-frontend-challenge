@@ -1,5 +1,8 @@
 export interface GoogleBookItem {
   id: string
+  accessInfo?: {
+    webReaderLink?: string
+  }
   volumeInfo?: {
     title?: string
     authors?: string[]

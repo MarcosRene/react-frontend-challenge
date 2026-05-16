@@ -1,4 +1,4 @@
-export * from "./hooks/use-search-books"
+export * from "./hooks/use-books"
 export * from "./hooks/use-get-book"
 export * from "./model/constants"
 export * from "./ui/book-list"
