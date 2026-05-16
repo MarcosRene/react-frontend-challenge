@@ -2,7 +2,6 @@ import { screen, waitFor } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 import type { GoogleBooksResponse } from "@/features/books/model/types"
-import { Explore } from "@/pages/explore/ui/explore"
 import { api } from "@/shared/api/axios"
 import { renderWithProviders } from "@/shared/test/render"
 
@@ -74,7 +73,7 @@ describe("Explore Page", () => {
     const user = userEvent.setup()
     vi.mocked(api.get).mockResolvedValueOnce({ data: mockBooks })
 
-    renderWithProviders(<Explore />)
+    await renderWithProviders({ initialRoute: "/explore", authenticated: true })
 
     const input = screen.getByPlaceholderText(/buscar livro/i)
     await user.type(input, "Clean Code")
@@ -95,7 +94,7 @@ describe("Explore Page", () => {
       data: { totalItems: 0, items: [] } as GoogleBooksResponse,
     })
 
-    renderWithProviders(<Explore />)
+    await renderWithProviders({ initialRoute: "/explore", authenticated: true })
 
     const input = screen.getByPlaceholderText(/buscar livro/i)
     await user.type(input, "LivroInexistente")
@@ -109,7 +108,7 @@ describe("Explore Page", () => {
     const user = userEvent.setup()
     vi.mocked(api.get).mockResolvedValue({ data: mockBooks })
 
-    renderWithProviders(<Explore />)
+    await renderWithProviders({ initialRoute: "/explore", authenticated: true })
 
     const input = screen.getByPlaceholderText(/buscar livro/i)
     await user.type(input, "Refactoring")
@@ -128,7 +127,7 @@ describe("Explore Page", () => {
     const user = userEvent.setup()
     vi.mocked(api.get).mockResolvedValue({ data: mockBooks })
 
-    renderWithProviders(<Explore />)
+    await renderWithProviders({ initialRoute: "/explore", authenticated: true })
 
     const input = screen.getByPlaceholderText(/buscar livro/i)
     await user.type(input, "Typescript")
@@ -161,7 +160,7 @@ describe("Explore Page", () => {
     const user = userEvent.setup()
     vi.mocked(api.get).mockResolvedValue({ data: mockBooks })
 
-    renderWithProviders(<Explore />)
+    await renderWithProviders({ initialRoute: "/explore", authenticated: true })
 
     const input = screen.getByPlaceholderText(/buscar livro/i)
     await user.type(input, "Typescript")
@@ -208,7 +207,7 @@ describe("Explore Page", () => {
     }
     vi.mocked(api.get).mockResolvedValueOnce({ data: secondPageBooks })
 
-    renderWithProviders(<Explore />)
+    await renderWithProviders({ initialRoute: "/explore", authenticated: true })
 
     const input = screen.getByPlaceholderText(/buscar livro/i)
     await user.type(input, "Design Patterns")

@@ -1,7 +1,7 @@
 import { BookOpen01Icon, Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
+import { useNavigate, useSearch } from "@tanstack/react-router"
 import { Suspense, useEffect, useRef, useState } from "react"
-import { useSearchParams } from "react-router-dom"
 import {
   BookList,
   BookListSkeleton,
@@ -25,8 +25,10 @@ import {
 } from "@/shared/ui/select"
 
 export function Explore() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const q = searchParams.get("q") || ""
+  const searchParams = useSearch({ from: "/_auth/_layout/explore" })
+  const navigate = useNavigate({ from: "/explore" })
+
+  const q = searchParams.q || ""
 
   const [search, setSearch] = useState(q)
   const [printType, setPrintType] = useState("all")
@@ -53,11 +55,25 @@ export function Explore() {
 
   useEffect(() => {
     if (debouncedSearch) {
-      setSearchParams({ q: debouncedSearch })
+      navigate({
+        to: "/explore",
+        search: (prevSearchParams) => ({
+          ...prevSearchParams,
+          q: debouncedSearch,
+        }),
+        replace: true,
+      })
       return
     }
-    setSearchParams({})
-  }, [debouncedSearch, setSearchParams])
+    navigate({
+      to: "/explore",
+      search: (prevSearchParams) => {
+        const { q: _, ...rest } = prevSearchParams
+        return rest
+      },
+      replace: true,
+    })
+  }, [debouncedSearch, navigate])
 
   return (
     <div className="flex flex-col gap-8 p-8">

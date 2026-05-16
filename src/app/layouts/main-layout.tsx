@@ -1,13 +1,15 @@
-import { Outlet } from "react-router-dom"
+import type { ReactNode } from "react"
 import { Sidebar } from "@/widgets/sidebar"
 
-export function MainLayout() {
+interface MainLayoutProps {
+  children?: ReactNode
+}
+
+export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       <Sidebar />
-      <main className="flex-1 pt-20 lg:pl-80 lg:pt-0">
-        <Outlet />
-      </main>
+      <main className="flex-1 pt-20 lg:pl-80 lg:pt-0">{children}</main>
     </div>
   )
 }

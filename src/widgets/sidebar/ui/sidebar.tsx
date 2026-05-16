@@ -7,7 +7,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as Collapsible from "@radix-ui/react-collapsible"
-import { useEffect, useState } from "react"
+import { useRouter } from "@tanstack/react-router"
 import moonIcon from "@/assets/icons/moon.png"
 import sunIcon from "@/assets/icons/sun.png"
 import { useAuthStore } from "@/features/auth/model/auth.store"
@@ -17,16 +17,15 @@ import { Button } from "@/shared/ui/button"
 import { NavItem } from "./nav-item"
 
 export function Sidebar() {
-  const [mounted, setMounted] = useState(false)
   const email = useAuthStore((state) => state.email)
   const logout = useAuthStore((state) => state.logout)
   const { isDarkMode, toggleTheme } = useThemeStore()
+  const router = useRouter()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
+  function handleLogout() {
+    logout()
+    router.navigate({ to: "/sign-in" })
+  }
 
   const initials = email?.substring(0, 2).toUpperCase() || "US"
 
@@ -108,7 +107,7 @@ export function Sidebar() {
               variant="ghost"
               size="icon"
               className="text-zinc-400 hover:text-destructive"
-              onClick={logout}
+              onClick={handleLogout}
               title="Sair"
             >
               <HugeiconsIcon icon={Logout01Icon} className="size-5" />

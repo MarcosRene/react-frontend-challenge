@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { z } from "zod"
 import { signIn } from "../api/sign-in"
@@ -23,13 +22,7 @@ export type SignInSchema = z.infer<typeof signInSchema>
 
 export function useSignIn() {
   const navigate = useNavigate()
-  const { setCredentials, isAuthenticated } = useAuthStore()
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/explore")
-    }
-  }, [isAuthenticated, navigate])
+  const { setCredentials } = useAuthStore()
 
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -43,7 +36,7 @@ export function useSignIn() {
     mutationFn: signIn,
     onSuccess: (data) => {
       setCredentials(data.token, data.email)
-      navigate("/dashboard")
+      navigate({ to: "/explore" })
       toast.success("Login realizado com sucesso!")
     },
     onError: (error) => {

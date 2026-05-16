@@ -1,6 +1,6 @@
 import { Home01Icon, Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "@tanstack/react-router"
 import { Button } from "@/shared/ui/button"
 
 export function NotFound() {
@@ -32,7 +32,7 @@ export function NotFound() {
         <Button
           size="lg"
           className="gap-2"
-          onClick={() => navigate("/explore")}
+          onClick={() => navigate({ to: "/explore" })}
         >
           <HugeiconsIcon icon={Home01Icon} className="size-4" />
           Voltar para Descoberta

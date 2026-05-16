@@ -1,5 +1,4 @@
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
-import type * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
 const Menu = MenuPrimitive.Root
@@ -65,4 +64,4 @@ function MenuItem({
   )
 }
 
-export { Menu, MenuTrigger, MenuContent, MenuItem }
+export { Menu, MenuContent, MenuItem, MenuTrigger }

@@ -8,14 +8,14 @@ import {
   GlobalIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams } from "@tanstack/react-router"
 import { useBookshelfStore } from "@/entities/book"
 import { useGetBook } from "@/features/books"
 import { BookDetailsSkeleton } from "@/features/books/ui/book-details-skeleton"
 import { Button } from "@/shared/ui/button"
 
 export function BookDetails() {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams({ from: "/_auth/_layout/book/$id" })
   const { data: book, isLoading } = useGetBook(id)
 
   const handleCreateBookshelfBook = useBookshelfStore(

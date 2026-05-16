@@ -6,8 +6,9 @@ import {
   ViewIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "@tanstack/react-router"
 import type { ColumnDef } from "@tanstack/react-table"
+import { useState } from "react"
 import {
   type BookStatus,
   type BookshelfBook,
@@ -33,7 +34,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select"
-import { useState } from "react"
 
 const STATUS_LABELS: Record<BookStatus, string> = {
   "want-to-read": "Quero Ler",
@@ -84,7 +84,7 @@ export const bookshelfColumns: ColumnDef<BookshelfBook>[] = [
       const title = row.getValue("title") as string
       return (
         <div
-          className="min-w-[150px] sm:min-w-[200px] line-clamp-2 font-medium"
+          className="max-w-64 sm:max-w-96 line-clamp-2 font-medium"
           title={title}
         >
           {title}
@@ -100,7 +100,7 @@ export const bookshelfColumns: ColumnDef<BookshelfBook>[] = [
         (row.getValue("authors") as string[]).join(", ") || "Autor desconhecido"
       return (
         <div
-          className="min-w-40 sm:min-w-52 line-clamp-2 text-muted-foreground"
+          className="max-w-40 sm:max-w-52 line-clamp-2 text-muted-foreground"
           title={authors}
         >
           {authors}
@@ -178,7 +178,11 @@ export const bookshelfColumns: ColumnDef<BookshelfBook>[] = [
               </Button>
             </MenuTrigger>
             <MenuContent align="end">
-              <MenuItem onClick={() => navigate(`/book/${bookId}`)}>
+              <MenuItem
+                onClick={() =>
+                  navigate({ to: "/book/$id", params: { id: bookId } })
+                }
+              >
                 <HugeiconsIcon icon={ViewIcon} />
                 Ver detalhes
               </MenuItem>

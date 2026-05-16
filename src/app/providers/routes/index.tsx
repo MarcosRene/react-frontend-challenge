@@ -1,7 +1,10 @@
-import { RouterProvider } from "react-router-dom"
+import { createFileRoute, redirect } from "@tanstack/react-router"
 
-import { router } from "./router"
-
-export function AppRoutes() {
-  return <RouterProvider router={router} />
-}
+export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    throw redirect({
+      to: "/sign-in",
+      replace: true,
+    })
+  },
+})

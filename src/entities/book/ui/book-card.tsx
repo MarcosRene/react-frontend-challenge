@@ -1,6 +1,6 @@
 import { Add01Icon, CheckmarkCircle01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "@tanstack/react-router"
 import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { useBookshelfStore } from "../model/bookshelf-store"
@@ -12,7 +12,6 @@ interface BookCardProps {
 
 export function BookCard({ book }: BookCardProps) {
   const { id, title, authors, thumbnailUrl } = book
-  const navigate = useNavigate()
   const handleCreateBookshelfBook = useBookshelfStore(
     (state) => state.handleCreateBookshelfBook,
   )
@@ -24,7 +23,11 @@ export function BookCard({ book }: BookCardProps) {
 
   return (
     <div className="group flex flex-col gap-3 rounded-xl border border-border bg-muted/30 p-3 transition-all hover:shadow-md dark:bg-muted/10">
-      <Link to={`/book/${id}`} className="flex flex-col gap-3">
+      <Link
+        to="/book/$bookId"
+        params={{ bookId: id }}
+        className="flex flex-col gap-3"
+      >
         <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-muted cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none">
           {thumbnailUrl ? (
             <img

@@ -1,12 +1,11 @@
 import { screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
-import { SignInForm } from "@/features/auth/ui/sign-in-form"
 import { renderWithProviders } from "@/shared/test/render"
 
 describe("SignInForm", () => {
-  it("deve renderizar os campos corretamente", () => {
-    renderWithProviders(<SignInForm />)
+  it("deve renderizar os campos corretamente", async () => {
+    await renderWithProviders({ initialRoute: "/sign-in" })
 
     expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument()
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
@@ -15,7 +14,7 @@ describe("SignInForm", () => {
 
   it("deve preencher formulário", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm />)
+    await renderWithProviders({ initialRoute: "/sign-in" })
 
     const emailInput = screen.getByRole("textbox", { name: /email/i })
     const passwordInput = screen.getByLabelText(/password/i)
@@ -29,7 +28,7 @@ describe("SignInForm", () => {
 
   it("deve exibir erro quando o e-mail for vazio", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm />)
+    await renderWithProviders({ initialRoute: "/sign-in" })
 
     const submitButton = screen.getByRole("button", { name: /entrar/i })
     await user.click(submitButton)
@@ -41,7 +40,7 @@ describe("SignInForm", () => {
 
   it("deve exibir erro quando o e-mail for inválido", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm />)
+    await renderWithProviders({ initialRoute: "/sign-in" })
 
     const emailInput = screen.getByRole("textbox", { name: /email/i })
     await user.type(emailInput, "email-invalido")
@@ -54,7 +53,7 @@ describe("SignInForm", () => {
 
   it("deve exibir erro quando a senha for vazia", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm />)
+    await renderWithProviders({ initialRoute: "/sign-in" })
 
     const submitButton = screen.getByRole("button", { name: /entrar/i })
     await user.click(submitButton)
@@ -64,7 +63,7 @@ describe("SignInForm", () => {
 
   it("deve exibir erro quando a senha tiver menos que 6 caracteres", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm />)
+    await renderWithProviders({ initialRoute: "/sign-in" })
 
     const passwordInput = screen.getByLabelText(/password/i)
     await user.type(passwordInput, "123")

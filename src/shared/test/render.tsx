@@ -1,46 +1,55 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { type RenderOptions, render } from "@testing-library/react"
-import type { PropsWithChildren, ReactNode } from "react"
+import {
+  createMemoryHistory,
+  createRouter,
+  RouterProvider,
+} from "@tanstack/react-router"
+import { act, render } from "@testing-library/react"
 
-import { MemoryRouter } from "react-router-dom"
+import { routeTree } from "@/app/providers/routes/routeTree.gen"
+import { useAuthStore } from "@/features/auth/model/auth.store"
 
-interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
+interface RenderWithProvidersOptions {
   initialRoute?: string
+  authenticated?: boolean
 }
 
-function createTestQueryClient() {
-  return new QueryClient({
+export async function renderWithProviders({
+  initialRoute = "/",
+  authenticated = false,
+}: RenderWithProvidersOptions = {}) {
+  useAuthStore.setState({
+    isAuthenticated: authenticated,
+    token: authenticated ? "test-token" : null,
+    email: authenticated ? "test@test.com" : null,
+  })
+
+  const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         retry: false,
         gcTime: 0,
       },
-
-      mutations: {
-        retry: false,
-      },
     },
   })
-}
 
-export function renderWithProviders(
-  ui: ReactNode,
-  options?: CustomRenderOptions,
-) {
-  const { initialRoute = "/", ...renderOptions } = options || {}
-
-  const queryClient = createTestQueryClient()
-
-  function Wrapper({ children }: PropsWithChildren) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={[initialRoute]}>{children}</MemoryRouter>
-      </QueryClientProvider>
-    )
-  }
-
-  return render(ui, {
-    wrapper: Wrapper,
-    ...renderOptions,
+  const router = createRouter({
+    routeTree,
+    history: createMemoryHistory({
+      initialEntries: [initialRoute],
+    }),
   })
+
+  await router.load()
+
+  let result!: ReturnType<typeof render>
+  await act(async () => {
+    result = render(
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>,
+    )
+  })
+
+  return result
 }
