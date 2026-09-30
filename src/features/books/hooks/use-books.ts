@@ -1,29 +1,8 @@
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
-import type { Book } from "@/entities/book"
+import { mapGoogleBookToBook } from "@/entities/book"
 import { api } from "@/shared/api/axios"
-import type {
-  GoogleBookItem,
-  GoogleBooksResponse,
-  SearchBooksParams,
-} from "../model/types"
-
-function mapGoogleBookToBook(item: GoogleBookItem): Book {
-  return {
-    id: item.id,
-    title: item.volumeInfo?.title ?? "Título desconhecido",
-    authors: item.volumeInfo?.authors ?? [],
-    description: item.volumeInfo?.description ?? "",
-    thumbnailUrl:
-      item.volumeInfo?.imageLinks?.thumbnail?.replace("http://", "https://") ??
-      null,
-    publishedDate: item.volumeInfo?.publishedDate ?? "",
-    publisher: item.volumeInfo?.publisher ?? "",
-    previewLink: item.accessInfo?.webReaderLink ?? "",
-    pageCount: item.volumeInfo?.pageCount,
-    categories: item.volumeInfo?.categories,
-  }
-}
+import type { GoogleBooksResponse, SearchBooksParams } from "../model/types"
 
 export function useBooks({ query, printType, orderBy }: SearchBooksParams) {
   return useSuspenseInfiniteQuery({
@@ -62,7 +41,12 @@ export function useBooks({ query, printType, orderBy }: SearchBooksParams) {
         (acc, page) => acc + (page.items?.length || 0),
         0,
       )
-      return lastPage.items && lastPage.items.length > 0
+      const pageSize = 20
+      const totalItems = Math.max(lastPage.totalItems, pageSize)
+
+      return lastPage.items &&
+        lastPage.items.length > 0 &&
+        currentCount < totalItems
         ? currentCount
         : undefined
     },

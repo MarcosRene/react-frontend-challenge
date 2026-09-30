@@ -9,6 +9,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { useNavigate } from "@tanstack/react-router"
 import type { ColumnDef } from "@tanstack/react-table"
 import { useState } from "react"
+import { toast } from "sonner"
 import {
   type BookStatus,
   type BookshelfBook,
@@ -169,6 +170,16 @@ export const bookshelfColumns: ColumnDef<BookshelfBook>[] = [
         (state) => state.handleDeleteBookshelfBook,
       )
 
+      function handleToggleBookshelf(bookId: string) {
+        if (!bookId) return
+
+        if (bookId) {
+          handleDeleteBookshelfBook(bookId)
+          toast.success("Livro removido da sua estante")
+          return
+        }
+      }
+
       return (
         <>
           <Menu>
@@ -215,7 +226,7 @@ export const bookshelfColumns: ColumnDef<BookshelfBook>[] = [
                   Cancelar
                 </AlertDialogCancel>
                 <AlertDialogAction
-                  onClick={() => handleDeleteBookshelfBook(bookId)}
+                  onClick={() => handleToggleBookshelf(bookId)}
                   className="gap-2 bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
                   <HugeiconsIcon icon={Delete01Icon} className="size-4" />

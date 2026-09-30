@@ -4,7 +4,7 @@ import { cn } from "@/shared/lib/utils"
 
 interface NavItemProps {
   to: string
-  icon: HugeiconsProps["icon"]
+  icon: NonNullable<HugeiconsProps["icon"]>
   title: string
 }
 

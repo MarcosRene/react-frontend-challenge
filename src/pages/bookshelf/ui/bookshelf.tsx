@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { Book02Icon, Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { useNavigate } from "@tanstack/react-router"
@@ -106,9 +105,9 @@ export function Bookshelf() {
               />
             </PaginationItem>
 
-            {pageNumbers.map((page, index) =>
+            {pageNumbers.map((page) =>
               page === "ellipsis" ? (
-                <PaginationItem key={`ellipsis-${index}`}>
+                <PaginationItem key={`ellipsis-${page}`}>
                   <PaginationEllipsis />
                 </PaginationItem>
               ) : (

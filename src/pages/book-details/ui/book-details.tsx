@@ -9,6 +9,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Link, useParams } from "@tanstack/react-router"
+import DOMPurify from "dompurify"
 import { toast } from "sonner"
 import { useBookshelfStore } from "@/entities/book"
 import { useGetBook } from "@/features/books"
@@ -29,6 +30,19 @@ export function BookDetails() {
     (state) => !!(book && state.books[book.id]),
   )
 
+  function handleToggleBookshelf() {
+    if (!book) return
+
+    if (inBookshelf) {
+      handleDeleteBookshelfBook(book.id)
+      toast.success("Livro removido da sua estante")
+      return
+    }
+
+    handleCreateBookshelfBook(book)
+    toast.success("Livro adicionado à sua estante")
+  }
+
   if (isLoading) return <BookDetailsSkeleton />
 
   if (!book) {
@@ -42,19 +56,6 @@ export function BookDetails() {
         </Link>
       </div>
     )
-  }
-
-  function handleToggleBookshelf() {
-    if (!book) return
-
-    if (inBookshelf) {
-      handleDeleteBookshelfBook(book.id)
-      toast.success("Livro removido da sua estante")
-      return
-    }
-
-    handleCreateBookshelfBook(book)
-    toast.success("Livro adicionado à sua estante")
   }
 
   return (
@@ -186,9 +187,11 @@ export function BookDetails() {
             <h2 className="text-3xl font-bold">Sinopse</h2>
             <div
               className="prose prose-xl dark:prose-invert max-w-none text-muted-foreground leading-relaxed"
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: Sanitized with DOMPurify
               dangerouslySetInnerHTML={{
-                __html: book.description || "Nenhuma sinopse disponível.",
+                __html: DOMPurify.sanitize(
+                  book.description || "Nenhuma sinopse disponível.",
+                ),
               }}
             />
           </div>

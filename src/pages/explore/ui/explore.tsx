@@ -1,4 +1,4 @@
-import { BookOpen01Icon, Search01Icon } from "@hugeicons/core-free-icons"
+import { Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { Suspense, useEffect, useRef, useState } from "react"
@@ -9,8 +9,6 @@ import {
   printTypes,
 } from "@/features/books"
 import { useDebounce } from "@/shared/lib/hooks/use-debounce"
-import { Button } from "@/shared/ui/button"
-import { EmptyState } from "@/shared/ui/empty-state"
 import {
   InputGroup,
   InputGroupAddon,
@@ -28,9 +26,7 @@ export function Explore() {
   const searchParams = useSearch({ from: "/_auth/_layout/explore" })
   const navigate = useNavigate({ from: "/explore" })
 
-  const q = searchParams.q || ""
-
-  const [search, setSearch] = useState(q)
+  const [search, setSearch] = useState(searchParams.q || "")
   const [printType, setPrintType] = useState("all")
   const [orderBy, setOrderBy] = useState("relevance")
 
@@ -45,21 +41,23 @@ export function Explore() {
     setSearch(event.target.value)
   }
 
-  function handlePrintTypeChange(value: string) {
-    setPrintType(value)
+  function handlePrintTypeChange(value: string | null) {
+    if (value) setPrintType(value)
   }
 
-  function handleOrderByChange(value: string) {
-    setOrderBy(value)
+  function handleOrderByChange(value: string | null) {
+    if (value) setOrderBy(value)
   }
+
+  const currentQuery = debouncedSearch.trim() || "javascript"
 
   useEffect(() => {
-    if (debouncedSearch) {
+    if (debouncedSearch.trim()) {
       navigate({
         to: "/explore",
         search: (prevSearchParams) => ({
           ...prevSearchParams,
-          q: debouncedSearch,
+          q: debouncedSearch.trim(),
         }),
         replace: true,
       })
@@ -100,65 +98,51 @@ export function Explore() {
       </div>
 
       <div className="flex-1">
-        {!debouncedSearch ? (
-          <EmptyState
-            icon={<HugeiconsIcon icon={BookOpen01Icon} className="size-8" />}
-            title="Sua jornada literária começa aqui"
-            description="Pesquise por livros incríveis para adicioná-los à sua estante pessoal e acompanhar seu progresso de leitura."
-            action={
-              <Button onClick={handleFocusSearch} className="gap-2">
-                <HugeiconsIcon icon={Search01Icon} className="size-4" />
-                Começar busca
-              </Button>
-            }
-          />
-        ) : (
-          <div className="w-full space-y-3">
-            <div className="flex justify-end items-center gap-3">
-              <Select
-                items={printTypes}
-                value={printType}
-                onValueChange={handlePrintTypeChange}
-              >
-                <SelectTrigger className="w-full md:w-[140px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {printTypes.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
-                      {item.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+        <div className="w-full space-y-3">
+          <div className="flex justify-end items-center gap-3">
+            <Select
+              items={printTypes}
+              value={printType}
+              onValueChange={handlePrintTypeChange}
+            >
+              <SelectTrigger className="w-full md:w-[140px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {printTypes.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-              <Select
-                items={orderOptions}
-                value={orderBy}
-                onValueChange={handleOrderByChange}
-              >
-                <SelectTrigger className="w-full md:w-[140px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {orderOptions.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
-                      {item.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Suspense fallback={<BookListSkeleton />}>
-              <BookList
-                query={debouncedSearch}
-                printType={printType}
-                orderBy={orderBy}
-                onFocusSearch={handleFocusSearch}
-              />
-            </Suspense>
+            <Select
+              items={orderOptions}
+              value={orderBy}
+              onValueChange={handleOrderByChange}
+            >
+              <SelectTrigger className="w-full md:w-[140px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {orderOptions.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        )}
+          <Suspense fallback={<BookListSkeleton />}>
+            <BookList
+              query={currentQuery}
+              printType={printType}
+              orderBy={orderBy}
+              onFocusSearch={handleFocusSearch}
+            />
+          </Suspense>
+        </div>
       </div>
     </div>
   )

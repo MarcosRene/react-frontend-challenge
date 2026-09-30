@@ -1,13 +1,16 @@
-import { ArrowLeft01Icon, ArrowRight01Icon, MoreHorizontalIcon } from "@hugeicons/core-free-icons"
+import {
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  MoreHorizontalIcon,
+} from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { cn } from "@/shared/lib/utils"
-import { Button, buttonVariants } from "@/shared/ui/button"
 import type { ComponentProps } from "react"
+import { cn } from "@/shared/lib/utils"
+import { Button } from "@/shared/ui/button"
 
 function Pagination({ className, ...props }: ComponentProps<"nav">) {
   return (
     <nav
-      role="navigation"
       aria-label="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}
@@ -32,37 +35,52 @@ type PaginationLinkProps = {
   isActive?: boolean
 } & ComponentProps<typeof Button>
 
-function PaginationLink({ className, isActive, ...props }: PaginationLinkProps) {
+function PaginationLink({
+  className,
+  isActive,
+  size = "icon",
+  ...props
+}: PaginationLinkProps) {
   return (
     <Button
       aria-current={isActive ? "page" : undefined}
       variant={isActive ? "outline" : "ghost"}
-      size="icon"
+      size={size}
       className={cn(className)}
       {...props}
     />
   )
 }
 
-function PaginationPrevious({ className, ...props }: ComponentProps<typeof PaginationLink>) {
+function PaginationPrevious({
+  className,
+  ...props
+}: ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
       aria-label="Ir para a página anterior"
-      className={cn("gap-1", className)}
+      size="default"
+      className={cn("gap-1 pl-2.5", className)}
       {...props}
     >
       <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
+      <span>Anterior</span>
     </PaginationLink>
   )
 }
 
-function PaginationNext({ className, ...props }: ComponentProps<typeof PaginationLink>) {
+function PaginationNext({
+  className,
+  ...props
+}: ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
       aria-label="Ir para a próxima página"
-      className={cn("gap-1", className)}
+      size="default"
+      className={cn("gap-1 pr-2.5", className)}
       {...props}
     >
+      <span>Próxima</span>
       <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
     </PaginationLink>
   )

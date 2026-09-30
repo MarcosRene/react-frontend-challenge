@@ -1,4 +1,8 @@
-import { Add01Icon, CheckmarkCircle01Icon } from "@hugeicons/core-free-icons"
+import {
+  Add01Icon,
+  Cancel01Icon,
+  CheckmarkCircle01Icon,
+} from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Link } from "@tanstack/react-router"
 import { toast } from "sonner"
@@ -15,11 +19,19 @@ export function BookCard({ book }: BookCardProps) {
   const handleCreateBookshelfBook = useBookshelfStore(
     (state) => state.handleCreateBookshelfBook,
   )
+  const handleDeleteBookshelfBook = useBookshelfStore(
+    (state) => state.handleDeleteBookshelfBook,
+  )
   const inBookshelf = useBookshelfStore((state) => !!state.books[book.id])
 
-  function handleAddToBookshelf() {
-    handleCreateBookshelfBook(book)
-    toast.success("Livro adicionado à sua estante")
+  function handleToggleBookshelf() {
+    if (inBookshelf) {
+      handleDeleteBookshelfBook(book.id)
+      toast.success("Livro removido da sua estante")
+    } else {
+      handleCreateBookshelfBook(book)
+      toast.success("Livro adicionado à sua estante")
+    }
   }
 
   return (
@@ -57,16 +69,31 @@ export function BookCard({ book }: BookCardProps) {
       <Button
         variant={inBookshelf ? "secondary" : "outline"}
         size="sm"
-        className="w-full gap-2"
-        disabled={inBookshelf}
-        onClick={handleAddToBookshelf}
+        className="w-full gap-2 group/btn"
+        onClick={handleToggleBookshelf}
       >
-        <HugeiconsIcon
-          data-bookself={inBookshelf}
-          icon={inBookshelf ? CheckmarkCircle01Icon : Add01Icon}
-          className="size-4 data-[bookself=true]:text-green-500"
-        />
-        {inBookshelf ? "Na minha estante" : "Adicionar à estante"}
+        {inBookshelf ? (
+          <>
+            <HugeiconsIcon
+              data-bookself={inBookshelf}
+              icon={CheckmarkCircle01Icon}
+              className="size-4 text-green-500 group-hover/btn:hidden"
+            />
+            <HugeiconsIcon
+              icon={Cancel01Icon}
+              className="size-4 hidden group-hover/btn:block text-destructive"
+            />
+            <span className="group-hover/btn:hidden">Na minha estante</span>
+            <span className="hidden group-hover/btn:block text-destructive">
+              Remover da estante
+            </span>
+          </>
+        ) : (
+          <>
+            <HugeiconsIcon icon={Add01Icon} className="size-4" />
+            <span>Adicionar à estante</span>
+          </>
+        )}
       </Button>
     </div>
   )

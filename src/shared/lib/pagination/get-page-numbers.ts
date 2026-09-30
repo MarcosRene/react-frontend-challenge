@@ -1,4 +1,7 @@
-export function getPageNumbers(current: number, total: number): (number | "ellipsis")[] {
+export function getPageNumbers(
+  current: number,
+  total: number,
+): (number | "ellipsis")[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
 
   const pages: (number | "ellipsis")[] = [1]
