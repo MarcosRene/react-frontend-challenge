@@ -7,14 +7,15 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Link } from "@tanstack/react-router"
 import { toast } from "sonner"
 import { Button } from "@/shared/ui/button"
-import { useBookshelfStore } from "../model/bookshelf-store"
+import { useBookshelfStore } from "@/entities/book"
 import type { Book } from "../model/types"
+import {memo} from "react";
 
 interface BookCardProps {
   book: Book
 }
 
-export function BookCard({ book }: BookCardProps) {
+function BaseBookCard({ book }: BookCardProps) {
   const { id, title, authors, thumbnailUrl } = book
   const handleCreateBookshelfBook = useBookshelfStore(
     (state) => state.handleCreateBookshelfBook,
@@ -37,7 +38,7 @@ export function BookCard({ book }: BookCardProps) {
   return (
     <div className="group flex flex-col gap-3 rounded-xl border border-border bg-muted/30 p-3 transition-all hover:shadow-md dark:bg-muted/10">
       <Link to="/book/$id" params={{ id }} className="flex flex-col gap-3">
-        <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-muted cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none">
+        <div className="relative aspect-3/4 overflow-hidden rounded-lg bg-muted cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none">
           {thumbnailUrl ? (
             <img
               src={thumbnailUrl}
@@ -98,3 +99,5 @@ export function BookCard({ book }: BookCardProps) {
     </div>
   )
 }
+
+export const BookCard = memo(BaseBookCard)

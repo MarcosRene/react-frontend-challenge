@@ -15,6 +15,7 @@ import { useBookshelfStore } from "@/entities/book"
 import { useGetBook } from "@/features/books"
 import { BookDetailsSkeleton } from "@/features/books/ui/book-details-skeleton"
 import { Button } from "@/shared/ui/button"
+import { formatToBrazillianDate } from "@/shared/lib/date/format-to-brazillian-date"
 
 export function BookDetails() {
   const { id } = useParams({ from: "/_auth/_layout/book/$id" })
@@ -132,7 +133,7 @@ export function BookDetails() {
 
           <div className="grid grid-cols-1 gap-6 border-y border-border py-8 sm:grid-cols-2 xl:grid-cols-3">
             <div className="flex items-center gap-4 text-sm">
-              <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                 <HugeiconsIcon
                   icon={Building01Icon}
                   className="size-6 text-primary"
@@ -148,7 +149,7 @@ export function BookDetails() {
               </div>
             </div>
             <div className="flex items-center gap-4 text-sm">
-              <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                 <HugeiconsIcon
                   icon={Calendar03Icon}
                   className="size-6 text-primary"
@@ -159,13 +160,15 @@ export function BookDetails() {
                   Publicação
                 </p>
                 <p className="text-lg font-medium">
-                  {book.publishedDate || "Data desconhecida"}
+                  {book.publishedDate
+                    ? formatToBrazillianDate(book.publishedDate)
+                    : "Data desconhecida"}
                 </p>
               </div>
             </div>
             {book.pageCount && (
               <div className="flex items-center gap-4 text-sm">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10">
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                   <HugeiconsIcon
                     icon={GlobalIcon}
                     className="size-6 text-primary"

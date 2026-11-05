@@ -5,7 +5,7 @@ import { BookCard } from "@/entities/book"
 import { Button } from "@/shared/ui/button"
 import { EmptyState } from "@/shared/ui/empty-state"
 import { Spinner } from "@/shared/ui/spinner"
-import { useBooks } from "../hooks/use-books"
+import { useBooks } from "@/features/books"
 
 interface BookListProps {
   query: string

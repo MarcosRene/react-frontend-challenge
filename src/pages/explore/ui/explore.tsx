@@ -27,8 +27,8 @@ export function Explore() {
   const navigate = useNavigate({ from: "/explore" })
 
   const [search, setSearch] = useState(searchParams.q || "")
-  const [printType, setPrintType] = useState("all")
-  const [orderBy, setOrderBy] = useState("relevance")
+  const [printType, setPrintType] = useState(searchParams.printType || "all")
+  const [orderBy, setOrderBy] = useState(searchParams.orderBy || "relevance")
 
   const debouncedSearch = useDebounce(search, 500)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -42,11 +42,31 @@ export function Explore() {
   }
 
   function handlePrintTypeChange(value: string | null) {
-    if (value) setPrintType(value)
+    if (!value) return
+
+    setPrintType(value)
+    navigate({
+      to: "/explore",
+      search: (prevSearchParams) => ({
+        ...prevSearchParams,
+        printType: value,
+      }),
+      replace: true,
+    })
   }
 
   function handleOrderByChange(value: string | null) {
-    if (value) setOrderBy(value)
+    if (!value) return
+
+    setOrderBy(value)
+    navigate({
+      to: "/explore",
+      search: (prevSearchParams) => ({
+        ...prevSearchParams,
+        orderBy: value,
+      }),
+      replace: true,
+    })
   }
 
   const currentQuery = debouncedSearch.trim() || "javascript"
