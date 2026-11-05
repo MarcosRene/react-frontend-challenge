@@ -1,0 +1,7 @@
+- O projeto apresenta falhas na etapa de build, incluindo erros de TypeScript que impedem a compilação da aplicação.
+- O lint também retorna erros pendentes, o que indica que a entrega não passou por uma validação final completa.
+- Foi identificada a utilização de dangerouslySetInnerHTML sem sanitização do conteúdo, representando um ponto de atenção relacionado à segurança.
+- A configuração do TypeScript não atende integralmente aos requisitos solicitados no desafio.
+- Há duplicação da lógica de mapeamento de dados em diferentes partes da aplicação, quando o ideal seria a centralização dessa responsabilidade.
+- A implementação da paginação não considera o total de registros retornados pela API, permitindo navegação além do limite necessário.
+- Também foram observadas algumas oportunidades de melhoria na experiência do usuário, como a ausência de conteúdo inicial na tela de descoberta e a impossibilidade de remover livros da estante diretamente pela listagem de descoberta.
