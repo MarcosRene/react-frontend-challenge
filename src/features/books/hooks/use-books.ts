@@ -41,8 +41,7 @@ export function useBooks({ query, printType, orderBy }: SearchBooksParams) {
         (acc, page) => acc + (page.items?.length || 0),
         0,
       )
-      const pageSize = 20
-      const totalItems = Math.max(lastPage.totalItems, pageSize)
+      const totalItems = lastPage.totalItems
 
       return lastPage.items &&
         lastPage.items.length > 0 &&
